@@ -22,10 +22,25 @@ const client = new MongoClient(uri, {
   },
 });
 
+// data collections
+const productCollection = client
+  .db("FitLifeNow")
+  .collection("productCollection");
+
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    client.connect();
+
+    app.get("/product/best", async (req, res) => {
+      const query = { isBest: true };
+      const options = {
+        sort: { price: 1 },
+      };
+      const result = await productCollection.find(query, options).toArray();
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
