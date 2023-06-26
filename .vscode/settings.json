@@ -1,0 +1,9 @@
+{
+  "editor.formatOnSave": true,
+  "files.autoSave": "onWindowChange",
+  "notebook.formatOnSave.enabled": true,
+  "javascript.format.semicolons": "insert",
+  "typescript.format.semicolons": "insert",
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": true
+}
