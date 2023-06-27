@@ -103,6 +103,24 @@ async function run() {
     });
 
     // All Cart APIs
+    // Get API for Cart Data
+    app.get("/carts", verifyJWT, async (req, res) => {
+      const email = req.query.email;
+      if (!email) {
+        res.send([]);
+      }
+      const decodedEmail = req.decoded.email;
+      if (email !== decodedEmail) {
+        return res
+          .status(403)
+          .send({ error: true, message: "forbidden access" });
+      }
+      const query = { email: email };
+      const result = await cartCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    // Post API of Cart Data
     app.post("/carts", async (req, res) => {
       const item = req.body;
       const id = req.body.product_id;
