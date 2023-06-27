@@ -4,7 +4,7 @@ const port = process.env.PORT || 5000;
 const cors = require("cors");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 // middleware
 app.use(cors());
@@ -26,11 +26,13 @@ const client = new MongoClient(uri, {
 const productCollection = client
   .db("FitLifeNow")
   .collection("productCollection");
+const usersCollection = client.db("FitLifeNow").collection("usersCollection");
 
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     client.connect();
+
     // Products APIs
 
     // Get API of All Product
@@ -46,6 +48,26 @@ async function run() {
         sort: { price: 1 },
       };
       const result = await productCollection.find(query, options).toArray();
+      res.send(result);
+    });
+
+    // Get API of Individual Product
+    app.get("/products/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const result = await productCollection.findOne(filter);
+      res.send(result);
+    });
+
+    // Post API of Users Details
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      const query = { email: user.email };
+      const existingUser = await usersCollection.findOne(query);
+      if (existingUser) {
+        return res.send({ message: "user already exists" });
+      }
+      const result = await usersCollection.insertOne(user);
       res.send(result);
     });
 
