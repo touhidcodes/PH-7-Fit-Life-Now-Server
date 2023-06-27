@@ -27,6 +27,7 @@ const productCollection = client
   .db("FitLifeNow")
   .collection("productCollection");
 const usersCollection = client.db("FitLifeNow").collection("usersCollection");
+const cartCollection = client.db("FitLifeNow").collection("cartCollection");
 
 async function run() {
   try {
@@ -59,6 +60,8 @@ async function run() {
       res.send(result);
     });
 
+    // All Users APIs
+
     // Post API of Users Details
     app.post("/users", async (req, res) => {
       const user = req.body;
@@ -68,6 +71,19 @@ async function run() {
         return res.send({ message: "user already exists" });
       }
       const result = await usersCollection.insertOne(user);
+      res.send(result);
+    });
+
+    // All Cart APIs
+    app.post("/carts", async (req, res) => {
+      const item = req.body;
+      const id = req.body.product_id;
+      const query = { product_id: id };
+      const existingCart = await cartCollection.findOne(query);
+      if (existingCart) {
+        return res.send({ message: "cart already exists" });
+      }
+      const result = await cartCollection.insertOne(item);
       res.send(result);
     });
 
