@@ -31,8 +31,16 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     client.connect();
+    // Products APIs
 
-    app.get("/product/best", async (req, res) => {
+    // Get API of All Product
+    app.get("/products", async (req, res) => {
+      const result = await productCollection.find().toArray();
+      res.send(result);
+    });
+
+    //  Get API of Best Products
+    app.get("/products/best", async (req, res) => {
       const query = { isBest: true };
       const options = {
         sort: { price: 1 },
