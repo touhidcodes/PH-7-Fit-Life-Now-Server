@@ -32,7 +32,8 @@ const verifyJWT = (req, res, next) => {
 };
 
 // mongodb
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.57whvd4.mongodb.net/?retryWrites=true&w=majority`;
+// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.57whvd4.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@ac-yzchwmg-shard-00-00.57whvd4.mongodb.net:27017,ac-yzchwmg-shard-00-01.57whvd4.mongodb.net:27017,ac-yzchwmg-shard-00-02.57whvd4.mongodb.net:27017/?ssl=true&replicaSet=atlas-gd2qrc-shard-0&authSource=admin&retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -143,7 +144,7 @@ async function run() {
     // await client.close();
   }
 }
-run();
+run().catch(console.dir);
 
 app.get("/", (req, res) => {
   res.send("Fit Life Now Server is Running!");
