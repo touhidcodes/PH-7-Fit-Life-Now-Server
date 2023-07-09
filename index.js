@@ -104,8 +104,18 @@ async function run() {
     });
 
     // All Users APIs ==>
-    // Get API for Users
+    // Get API for All Users
     app.get("/users", verifyJWT, verifyAdmin, async (req, res) => {
+      const email = req.query.email;
+      if (!email) {
+        res.send([]);
+      }
+      const decodedEmail = req.decoded.email;
+      if (email !== decodedEmail) {
+        return res
+          .status(403)
+          .send({ error: true, message: "forbidden access" });
+      }
       const result = await usersCollection.find().toArray();
       res.send(result);
     });
@@ -148,6 +158,22 @@ async function run() {
     });
 
     // All Cart APIs
+    // Get API for All Cart Data
+    app.get("/carts/all", verifyJWT, verifyAdmin, async (req, res) => {
+      const email = req.query.email;
+      if (!email) {
+        res.send([]);
+      }
+      const decodedEmail = req.decoded.email;
+      if (email !== decodedEmail) {
+        return res
+          .status(403)
+          .send({ error: true, message: "forbidden access" });
+      }
+      const result = await cartCollection.find().toArray();
+      res.send(result);
+    });
+
     // Get API for Cart Data
     app.get("/carts", verifyJWT, async (req, res) => {
       const email = req.query.email;
