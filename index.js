@@ -91,6 +91,18 @@ async function run() {
     });
 
     // All Users APIs ==>
+    // // Get API of Admin Users Role
+    app.get("/users/admin/:email", verifyJWT, async (req, res) => {
+      const email = req.params.email;
+      if (req.decoded.email !== email) {
+        res.send({ admin: false });
+      }
+      const query = { email: email };
+      const user = await usersCollection.findOne(query);
+      const result = { admin: user?.role === "admin" };
+      res.send(result);
+    });
+
     // Post API of Users Details
     app.post("/users", async (req, res) => {
       const user = req.body;
