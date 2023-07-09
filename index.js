@@ -204,6 +204,19 @@ async function run() {
       res.send(result);
     });
 
+    // Patch API for Cart Status as Admin
+    app.patch("/delivered/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const updateUser = {
+        $set: {
+          status: "Delivered",
+        },
+      };
+      const result = await cartCollection.updateOne(filter, updateUser);
+      res.send(result);
+    });
+
     // Delete API for Cart Data
     app.delete("/carts/:id", verifyJWT, async (req, res) => {
       const id = req.params.id;
