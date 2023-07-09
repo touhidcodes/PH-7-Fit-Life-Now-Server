@@ -103,6 +103,13 @@ async function run() {
       res.send(result);
     });
 
+    // Post API for add products
+    app.post("/products", verifyJWT, verifyAdmin, async (req, res) => {
+      const newItem = req.body;
+      const result = await productCollection.insertOne(newItem);
+      res.send(result);
+    });
+
     // All Users APIs ==>
     // Get API for All Users
     app.get("/users", verifyJWT, verifyAdmin, async (req, res) => {
@@ -120,7 +127,7 @@ async function run() {
       res.send(result);
     });
 
-    // // Get API of Admin Users Role
+    //  Get API of Admin Users Role
     app.get("/users/admin/:email", verifyJWT, async (req, res) => {
       const email = req.params.email;
       if (req.decoded.email !== email) {
