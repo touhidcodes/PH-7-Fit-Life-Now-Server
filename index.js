@@ -5,6 +5,7 @@ const cors = require("cors");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+const stripe = require("stripe")(process.env.PAYMENT_SECRET_KEY);
 
 // middleware
 app.use(cors());
@@ -50,6 +51,9 @@ const productCollection = client
   .collection("productCollection");
 const usersCollection = client.db("FitLifeNow").collection("usersCollection");
 const cartCollection = client.db("FitLifeNow").collection("cartCollection");
+const paymentCollection = client
+  .db("FitLifeNow")
+  .collection("paymentCollection");
 
 async function run() {
   try {
