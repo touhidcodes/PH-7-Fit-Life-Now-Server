@@ -237,6 +237,14 @@ async function run() {
     });
 
     //  Payment APIs
+    // Payment History API
+    app.get("/history", verifyJWT, async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const result = await paymentCollection.find(query).toArray();
+      res.send(result);
+    });
+
     //  Payment API
     app.post("/payments", verifyJWT, async (req, res) => {
       const payment = req.body;
